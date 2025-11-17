@@ -1,38 +1,25 @@
+import React from 'react';
+import RecentActivities from './components/Dashboard/RecentActivities';
+import { FaUserPlus, FaBook, FaDollarSign } from 'react-icons/fa';
+
 export default function App() {
+  const recentActivities = [
+    { title: 'New student enrolled: Alice Johnson', time: '2 hours ago', icon: <FaUserPlus /> },
+    { title: 'Course added: Advanced Math', time: '5 hours ago', icon: <FaBook /> },
+    { title: 'Payment received: $500 from Bob Smith', time: '1 day ago', icon: <FaDollarSign /> },
+    { title: 'New student enrolled: Charlie Brown', time: '2 days ago', icon: <FaUserPlus /> },
+  ];
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-600 via-purple-700 to-indigo-900 p-6">
+    <div className="bg-gray-100 min-h-screen p-8 font-sans">
+      <header className="mb-10">
+        <h1 className="text-4xl font-bold text-gray-800">Dashboard Recent Activities</h1>
+        <p className="text-lg text-gray-600">Testing the RecentActivities component.</p>
+      </header>
 
-      <div className="max-w-xl bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-10 text-center border border-white/20">
-
-        <h1 className="text-4xl font-bold text-pink-300 drop-shadow-lg">
-          🌙✨ For Aicha
-        </h1>
-
-        <p className="mt-6 text-lg leading-relaxed text-white/90">
-          Imagine this, Aicha…  
-          The night is quiet, and the sky is full of soft stars.  
-          We sit beside the ocean, the waves whispering your name  
-          <span className="text-pink-300">“Aicha… Aicha…”</span>  
-          as they touch the shore.
-        </p>
-
-        <p className="mt-4 text-lg text-white/90">
-          The moonlight reflects in your eyes,  
-          and in that moment the world becomes silent—  
-          only your smile exists.
-        </p>
-
-        <p className="mt-4 text-lg text-white/90">
-          Every place becomes magical  
-          the moment <span className="text-pink-300 font-semibold">you</span> are in it.
-        </p>
-
-        <button className="mt-8 px-8 py-3 bg-pink-500 hover:bg-pink-600 transition rounded-full text-white font-semibold shadow-lg">
-          ❤️ A romantic message for Aicha
-        </button>
-
+      <div className="max-w-lg mx-auto">
+        <RecentActivities activities={recentActivities} />
       </div>
-
     </div>
   );
 }
