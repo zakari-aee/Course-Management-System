@@ -1,61 +1,93 @@
+// src/pages/App.jsx
 import React from 'react';
-import StatsCard from './components/Dashboard/StatsCard';
-import RecentActivities from './components/Dashboard/RecentActivities';
-import { FaUserGraduate, FaBook, FaDollarSign, FaCheckCircle, FaClipboard } from 'react-icons/fa';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from '../context/AuthContext';
+import Login from '../components/Login/Login';
+import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
+import Navigation from '../components/Navigation/Navigation';
 
-export default function App() {
-  // Sample data for RecentActivities
-  const activities = [
-    {
-      icon: <FaCheckCircle />,
-      title: 'New student registered: Alice Johnson',
-      time: '2 hours ago',
-    },
-    {
-      icon: <FaClipboard />,
-      title: 'Math exam results uploaded',
-      time: '5 hours ago',
-    },
-    {
-      icon: <FaCheckCircle />,
-      title: 'Payment received from parent: Bob Smith',
-      time: '1 day ago',
-    },
-  ];
-
-  return (
-    <div className="bg-gray-100 min-h-screen p-8 font-sans">
-      <header className="mb-10 text-center">
-        <h1 className="text-4xl font-bold text-gray-800">School Dashboard</h1>
-        <p className="text-gray-600 mt-2">Overview of students, courses, and payments</p>
-      </header>
-
-      {/* Stats Cards */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <StatsCard
-          title="Total Students"
-          value="1,245"
-          icon={<FaUserGraduate />}
-          color="bg-blue-500"
-        />
-        <StatsCard
-          title="Courses"
-          value="32"
-          icon={<FaBook />}
-          color="bg-green-500"
-        />
-        <StatsCard
-          title="Payments"
-          value="$12,450"
-          icon={<FaDollarSign />}
-          color="bg-yellow-500"
-        />
-      </section>
-
-      {/* Recent Activities */}
-      <section className="max-w-4xl mx-auto">
-        <RecentActivities activities={activities} />
-      </section>
+// Simple dashboard components based on role
+const AdminDashboard = () => (
+  <div className="p-6">
+    <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white p-4 rounded-lg shadow">Manage Courses</div>
+      <div className="bg-white p-4 rounded-lg shadow">Manage Users</div>
+      <div className="bg-white p-4 rounded-lg shadow">System Settings</div>
     </div>
+  </div>
+);
+
+const StudentDashboard = () => (
+  <div className="p-6">
+    <h1 className="text-2xl font-bold mb-4">Student Dashboard</h1>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="bg-white p-4 rounded-lg shadow">My Courses</div>
+      <div className="bg-white p-4 rounded-lg shadow">Grades</div>
+    </div>
+  </div>
+);
+
+const TeacherDashboard = () => (
+  <div className="p-6">
+    <h1 className="text-2xl font-bold mb-4">Teacher Dashboard</h1>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="bg-white p-4 rounded-lg shadow">My Classes</div>
+      <div className="bg-white p-4 rounded-lg shadow">Student Progress</div>
+    </div>
+  </div>
+);
+
+const ParentDashboard = () => (
+  <div className="p-6">
+    <h1 className="text-2xl font-bold mb-4">Parent Dashboard</h1>
+    <div className="grid grid-cols-1 gap-4">
+      <div className="bg-white p-4 rounded-lg shadow">Child Progress</div>
+    </div>
+  </div>
+);
+
+const Dashboard = () => {
+  const { user } = useAuth();
+  
+  switch (user?.role) {
+    case 'admin':
+      return <AdminDashboard />;
+    case 'student':
+      return <StudentDashboard />;
+    case 'teacher':
+      return <TeacherDashboard />;
+    case 'parent':
+      return <ParentDashboard />;
+    default:
+      return <Navigate to="/login" replace />;
+  }
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-100">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Navigation />
+                    <Dashboard />
+                  </>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
+
+export default App;
