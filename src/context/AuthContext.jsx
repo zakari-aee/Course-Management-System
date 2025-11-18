@@ -27,25 +27,24 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password, role) => {
     try {
-      const response = await mockLoginAPI(email, password, role);
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      if (response.success) {
-        const userData = {
-          email,
-          role,
-          token: response.token,
-          name: response.name,
-          id: response.id
-        };
-        
-        setUser(userData);
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(userData));
-        
-        return { success: true };
-      } else {
-        return { success: false, error: response.error };
-      }
+      // Mock authentication - always successful for testing
+      const userData = {
+        id: 1,
+        email,
+        role,
+        name: role === 'admin' ? 'System Admin' : 'Jane Teacher',
+        token: 'mock-jwt-token-' + Date.now()
+      };
+      
+      setUser(userData);
+      localStorage.setItem('token', userData.token);
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      return { success: true };
+      
     } catch (error) {
       return { success: false, error: 'Login failed. Please try again.' };
     }
@@ -70,34 +69,4 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-// Mock API function
-const mockLoginAPI = (email, password, role) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const validUsers = {
-        'admin@school.com': { password: 'admin123', role: 'admin', name: 'System Admin', id: 1 },
-        'student@school.com': { password: 'student123', role: 'student', name: 'John Student', id: 2 },
-        'teacher@school.com': { password: 'teacher123', role: 'teacher', name: 'Jane Teacher', id: 3 },
-        'parent@school.com': { password: 'parent123', role: 'parent', name: 'Mike Parent', id: 4 }
-      };
-
-      const user = validUsers[email];
-      
-      if (user && user.password === password && user.role === role) {
-        resolve({
-          success: true,
-          token: `mock-jwt-token-${Date.now()}`,
-          name: user.name,
-          id: user.id
-        });
-      } else {
-        resolve({
-          success: false,
-          error: 'Invalid credentials or role mismatch'
-        });
-      }
-    }, 1000);
-  });
 };

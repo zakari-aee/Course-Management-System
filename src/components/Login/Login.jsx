@@ -7,7 +7,7 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    role: 'student'
+    role: 'admin' // Default to admin for testing
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -95,8 +95,8 @@ const Login = () => {
               <label className="block text-sm font-medium text-gray-700">
                 Login As
               </label>
-              <div className="mt-1 grid grid-cols-3 gap-3">
-                {['admin', 'student', 'teacher', 'parent'].map((role) => (
+              <div className="mt-1 grid grid-cols-2 gap-3">
+                {['admin', 'teacher'].map((role) => (
                   <button
                     key={role}
                     type="button"
@@ -130,9 +130,10 @@ const Login = () => {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
                     errors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
+                  placeholder="admin@school.com"
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -152,9 +153,10 @@ const Login = () => {
                   autoComplete="current-password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
                     errors.password ? 'border-red-500' : 'border-gray-300'
                   }`}
+                  placeholder="admin123"
                 />
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600">{errors.password}</p>
@@ -196,18 +198,12 @@ const Login = () => {
               </div>
             </div>
             
-            <div className="mt-4 grid grid-cols-1 gap-2 text-xs">
+            <div className="mt-4 space-y-2 text-xs">
               <div className="p-2 bg-gray-50 rounded">
                 <strong>Admin:</strong> admin@school.com / admin123
               </div>
               <div className="p-2 bg-gray-50 rounded">
-                <strong>Student:</strong> student@school.com / student123
-              </div>
-              <div className="p-2 bg-gray-50 rounded">
                 <strong>Teacher:</strong> teacher@school.com / teacher123
-              </div>
-              <div className="p-2 bg-gray-50 rounded">
-                <strong>Parent:</strong> parent@school.com / parent123
               </div>
             </div>
           </div>
