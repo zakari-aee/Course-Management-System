@@ -1,29 +1,96 @@
 import React, { useState } from 'react';
-import Input from '../UI/Input';
-import Button from '../UI/Button';
+import { useData } from '../../context/DataContext'; 
 
-const CourseForm = ({ onSubmit, initialData = {} }) => {
-  const [name, setName] = useState(initialData.name || '');
-  const [description, setDescription] = useState(initialData.description || '');
-  const [teacher, setTeacher] = useState(initialData.teacher || '');
-  const [students, setStudents] = useState(initialData.students || 0);
+const CourseForm = ({ course, onSave, onCancel }) => {
+  const { users } = useData();
+  const [formData, setFormData] = useState({
+    name: course?.name || '',
+    description: course?.description || '',
+    schedule: course?.schedule || '',
+    teacherId: course?.teacherId || ''
+  });
+
+  const teachers = users.filter(u => u.role === 'teacher');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ name, description, teacher, students });
+    onSave(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-6 space-y-4">
-      <h3 className="text-xl font-semibold text-gray-700">{initialData.name ? 'Edit Course' : 'Add Course'}</h3>
-      <Input label="Course Name" value={name} onChange={(e) => setName(e.target.value)} />
-      <Input label="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-      <Input label="Teacher" value={teacher} onChange={(e) => setTeacher(e.target.value)} />
-      <Input label="Number of Students" type="number" value={students} onChange={(e) => setStudents(e.target.value)} />
-      <div className="flex justify-end">
-        <Button type="submit" variant="primary">{initialData.name ? 'Update' : 'Create'}</Button>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-xl font-semibold mb-4">
+          {course ? 'Edit Course' : 'Add New Course'}
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Course Name</label>
+            <input
+              type="text"
+              required
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <textarea
+              required
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Schedule</label>
+            <input
+              type="text"
+              required
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              value={formData.schedule}
+              onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
+              placeholder="e.g., Mon, Wed 9:00-10:30"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Teacher</label>
+            <select
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              value={formData.teacherId}
+              onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
+            >
+              <option value="">Select Teacher</option>
+              {teachers.map(teacher => (
+                <option key={teacher.id} value={teacher.id}>
+                  {teacher.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="flex justify-end space-x-3">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              {course ? 'Update' : 'Add'} Course
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 };
 

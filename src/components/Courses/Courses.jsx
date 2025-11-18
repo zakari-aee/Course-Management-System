@@ -1,14 +1,24 @@
 import React from 'react';
+import { useAuth } from '../../context/AuthContext'; // Fixed import
+import { useData } from '../../context/DataContext'; // Fixed import
 import CourseCard from './CourseCard';
+import CourseForm from './CourseForm';
 
-const Courses = ({ courses = [] }) => {
+// ... rest of the code remains the same
+
+const Courses = () => {
+  const { user } = useAuth();
+  const { courses } = useData();
+
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-semibold text-gray-700">Courses</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.length === 0 && <p className="text-gray-500">No courses available.</p>}
-        {courses.map((course, idx) => (
-          <CourseCard key={idx} course={course} />
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-gray-900">Courses Management</h1>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {courses.map(course => (
+          <CourseCard key={course.id} course={course} />
         ))}
       </div>
     </div>

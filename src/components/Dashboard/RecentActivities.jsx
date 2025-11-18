@@ -1,33 +1,37 @@
 import React from 'react';
+import { useData } from '../../context/DataContext';
 
-const RecentActivities = ({ activities = [] }) => {
+const RecentActivities = () => {
+  const { enrollments, users, courses } = useData();
+
+  const recentEnrollments = enrollments.slice(0, 5);
+
   return (
-    <div className="bg-white shadow-md rounded-2xl p-6 max-w-md mx-auto">
-      {/* Header */}
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Recent Activities</h2>
-      
-      <ul className="space-y-4">
-        {activities.length === 0 && (
-          <li className="text-gray-400 italic text-center">No recent activities.</li>
-        )}
-        {activities.map((activity, index) => (
-          <li
-            key={index}
-            className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
-          >
-            {/* Icon Circle */}
-            <div className={`flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600`}>
-              {activity.icon}
+    <div className="bg-white p-6 rounded-lg shadow">
+      <h3 className="text-lg font-semibold mb-4">Recent Enrollments</h3>
+      <div className="space-y-3">
+        {recentEnrollments.map(enrollment => {
+          const student = users.find(u => u.id === enrollment.studentId);
+          const course = courses.find(c => c.id === enrollment.courseId);
+          
+          return (
+            <div key={enrollment.id} className="flex justify-between items-center p-3 bg-gray-50 rounded">
+              <div>
+                <p className="font-medium">{student?.name}</p>
+                <p className="text-sm text-gray-600">{course?.name}</p>
+              </div>
+              <span className={`px-2 py-1 rounded-full text-xs ${
+                enrollment.grade === 'A' ? 'bg-green-100 text-green-800' :
+                enrollment.grade === 'B' ? 'bg-blue-100 text-blue-800' :
+                enrollment.grade === 'C' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-red-100 text-red-800'
+              }`}>
+                Grade: {enrollment.grade || 'N/A'}
+              </span>
             </div>
-
-            {/* Text */}
-            <div className="flex-1">
-              <p className="text-gray-800 font-medium">{activity.title}</p>
-              <p className="text-gray-500 text-sm">{activity.time}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+          );
+        })}
+      </div>
     </div>
   );
 };
