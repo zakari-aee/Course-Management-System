@@ -1,4 +1,4 @@
-// src/context/AuthContext.js
+// src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in on component mount
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     
@@ -28,7 +27,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password, role) => {
     try {
-      // Simulate API call
       const response = await mockLoginAPI(email, password, role);
       
       if (response.success) {

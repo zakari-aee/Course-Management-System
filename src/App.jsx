@@ -1,12 +1,12 @@
-// src/pages/App.jsx
+// src/App.jsx (move from src/pages/App.jsx to here)
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from '../context/AuthContext';
-import Login from '../components/Login/Login';
-import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
-import Navigation from '../components/Navigation/Navigation';
+import { AuthProvider, useAuth } from './context/AuthContext.jsx';
+import Login from './components/Login/Login';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import Navigation from './components/Navigation/Navigation';
 
-// Simple dashboard components based on role
+// Dashboard components
 const AdminDashboard = () => (
   <div className="p-6">
     <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>

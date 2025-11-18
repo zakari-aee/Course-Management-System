@@ -1,6 +1,6 @@
 // src/components/Login/Login.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext'; // Fixed import
+import { useAuth } from '../../context/AuthContext.jsx';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Login = () => {
@@ -96,7 +96,7 @@ const Login = () => {
                 Login As
               </label>
               <div className="mt-1 grid grid-cols-3 gap-3">
-                {['admin', 'student', 'teacher'].map((role) => (
+                {['admin', 'student', 'teacher', 'parent'].map((role) => (
                   <button
                     key={role}
                     type="button"
@@ -205,6 +205,9 @@ const Login = () => {
               </div>
               <div className="p-2 bg-gray-50 rounded">
                 <strong>Teacher:</strong> teacher@school.com / teacher123
+              </div>
+              <div className="p-2 bg-gray-50 rounded">
+                <strong>Parent:</strong> parent@school.com / parent123
               </div>
             </div>
           </div>

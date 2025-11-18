@@ -1,6 +1,6 @@
 // src/components/Navigation/Navigation.jsx
 import React from 'react';
-import { useAuth } from '../../context/AuthContext'; // Fixed import
+import { useAuth } from '../../context/AuthContext.jsx';
 
 const Navigation = () => {
   const { user, logout } = useAuth();
